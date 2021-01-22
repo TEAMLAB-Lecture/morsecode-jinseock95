@@ -279,10 +279,10 @@ def encoding_sentence(english_sentence):
     """
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당 또는 필요에 따라 자유로운 수정
-
+    cleaned_message = get_cleaned_english_sentence(english_sentence)
     from functools import reduce
     sentence = []
-    for word in english_sentence.split():
+    for word in cleaned_message.split():
         elem = []
         for char in word:
             elem.append(encoding_character(char))
@@ -328,8 +328,7 @@ def main():
             break
 
         elif which == 'Eng':
-            cleaned_message = get_cleaned_english_sentence(input_message)
-            encoded = encoding_sentence(cleaned_message)
+            encoded = encoding_sentence(input_message)
             print(encoded)
 
         elif which == 'mors':

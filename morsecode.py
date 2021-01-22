@@ -192,9 +192,9 @@ def decoding_character(morse_character):
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당 또는 필요에 따라 자유로운 수정
     morse_code_dict = get_morse_code_dict()
-    result = None
+    morse2alph = {v : k for k, v in morse_code_dict.items()}
 
-    return result
+    return morse2alph[morse_character]
     # ==================================
 
 
@@ -221,20 +221,10 @@ def encoding_character(english_character):
     """
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당 또는 필요에 따라 자유로운 수정
-    from functools import reduce
+
 
     morse_code_dict = get_morse_code_dict()
-    sentence = []
-    for word in english_character.split():
-        elem = []
-        for char in word:
-            elem.append(morse_code_dict[char.upper()])
-        sentence.append(elem)
-
-    morse_code = list(map(lambda x : ' '.join(x), sentence))
-    result = reduce(lambda x,y : x + '  ' + y, morse_code)
-
-    return result
+    return morse_code_dict[english_character.upper()]
     # ==================================
 
 
@@ -257,15 +247,13 @@ def decoding_sentence(morse_sentence):
     """
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당 또는 필요에 따라 자유로운 수정
-    morse_code_dict = get_morse_code_dict()
-    morse2alph = {v : k for k, v in morse_code_dict.items()}
 
     sentence = []
     for mos in morse_sentence.split(' '):
         if mos == '':
             sentence.append(' ')
             continue
-        sentence.append(morse2alph[mos])
+        sentence.append(decoding_character(mos))
     result = ''.join(sentence)
     return result
     # ==================================
@@ -291,7 +279,19 @@ def encoding_sentence(english_sentence):
     """
     # ===Modify codes below=============
     # 조건에 따라 변환되어야 할 결과를 result 변수에 할당 또는 필요에 따라 자유로운 수정
-    result = None
+
+    from functools import reduce
+    sentence = []
+    for word in english_sentence.split():
+        elem = []
+        for char in word:
+            elem.append(encoding_character(char))
+        sentence.append(elem)
+
+    morse_code = list(map(lambda x : ' '.join(x), sentence))
+    result = reduce(lambda x,y : x + '  ' + y, morse_code)
+
+    return result
 
     return result
     # ==================================
@@ -329,7 +329,7 @@ def main():
 
         elif which == 'Eng':
             cleaned_message = get_cleaned_english_sentence(input_message)
-            encoded = encoding_character(cleaned_message)
+            encoded = encoding_sentence(cleaned_message)
             print(encoded)
 
         elif which == 'mors':
